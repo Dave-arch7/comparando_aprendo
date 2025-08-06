@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Comparando Aprendo - Niveles</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, Arial, sans-serif;
+      background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
+      text-align: center;
+      min-height: 100vh;
+    }
+    
+    nav {
+      background: linear-gradient(45deg, #7CFC00, #32CD32);
+      padding: 15px;
+      text-align: left;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+    
+    nav a {
+      margin-right: 30px;
+      text-decoration: none;
+      color: #2E8B57;
+      font-weight: bold;
+      font-size: 18px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.3);
+      transition: all 0.3s ease;
+    }
+    
+    nav a:hover {
+      background: rgba(255,255,255,0.6);
+      transform: translateY(-2px);
+    }
+    
+    .titulo {
+      margin-top: 40px;
+      padding: 20px;
+    }
+    
+    .colorido span {
+      font-size: 52px;
+      font-weight: bold;
+      padding: 0 3px;
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+      animation: bounce 2s infinite alternate;
+    }
+    
+    @keyframes bounce {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-10px); }
+    }
+    
+    .subtitulo {
+      font-size: 40px;
+      font-weight: bold;
+      margin: 10px 0 20px;
+      color: #2E8B57;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .niveles-titulo {
+      font-size: 36px;
+      margin: 30px 0;
+      font-weight: bold;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .niveles {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 50px;
+      flex-wrap: wrap;
+      padding: 0 20px;
+    }
+    
+    .nivel {
+      width: 200px;
+      background: linear-gradient(145deg, #ffffff, #f0f0f0);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      border: 3px solid transparent;
+    }
+    
+    .nivel:hover {
+      transform: translateY(-10px) scale(1.05);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+      border-color: #FFD700;
+    }
+    
+    .nivel .encabezado {
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+      padding: 15px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+    
+    .nivel .simbolo {
+      font-size: 60px;
+      margin: 20px 0;
+      font-weight: bold;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .nivel .descripcion {
+      font-size: 14px;
+      color: #555;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+    
+    .mayor-que {
+      background: linear-gradient(145deg, #32CD32, #228B22);
+    }
+    
+    .menor-que {
+      background: linear-gradient(145deg, #FFA500, #FF8C00);
+    }
+    
+    .igual-que {
+      background: linear-gradient(145deg, #FF6347, #DC143C);
+    }
+    
+    /* Efectos de partículas decorativas */
+    .particulas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .particula {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #FFD700;
+      border-radius: 50%;
+      animation: flotar 6s infinite linear;
+    }
+    
+    @keyframes flotar {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .niveles {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+      }
+      
+      .nivel {
+        width: 250px;
+      }
+      
+      .colorido span {
+        font-size: 36px;
+      }
+      
+      .subtitulo {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="particulas" id="particulas"></div>
+  
+  <nav>
+    <a href="index.html">🏠 Inicio</a>
+    <a href="#">👥 Nosotros</a>
+  </nav>
+
+  <div class="titulo">
+    <div class="colorido">
+      <span style="color:red;">C</span>
+      <span style="color:orange;">o</span>
+      <span style="color:green;">m</span>
+      <span style="color:blue;">p</span>
+      <span style="color:red;">a</span>
+      <span style="color:white;">r</span>
+      <span style="color:magenta;">a</span>
+      <span style="color:limegreen;">n</span>
+      <span style="color:orange;">d</span>
+      <span style="color:deeppink;">o</span>
+    </div>
+    <div class="subtitulo">APRENDO</div>
+    
+    <h2 class="niveles-titulo">
+      <span style="color:red;">E</span>
+      <span style="color:orange;">l</span>
+      <span style="color:yellow;">i</span>
+      <span style="color:green;">g</span>
+      <span style="color:blue;">e</span>
+      <span style="color:purple;"> </span>
+      <span style="color:indigo;">t</span>
+      <span style="color:red;">u</span>
+      <span style="color:orange;"> </span>
+      <span style="color:green;">o</span>
+      <span style="color:blue;">p</span>
+      <span style="color:purple;">e</span>
+      <span style="color:indigo;">r</span>
+      <span style="color:red;">a</span>
+      <span style="color:orange;">d</span>
+      <span style="color:green;">o</span>
+      <span style="color:blue;">r</span>
+    </h2>
+  </div>
+
+  <div class="niveles">
+    <a href="juego.html?operador=mayor" class="nivel">
+      <div class="encabezado mayor-que">MAYOR QUE</div>
+      <div class="simbolo" style="color: #32CD32;">&gt;</div>
+      <div class="descripcion">Encuentra el número más grande</div>
+    </a>
+    
+    <a href="juego.html?operador=menor" class="nivel">
+      <div class="encabezado menor-que">MENOR QUE</div>
+      <div class="simbolo" style="color: #FFA500;">&lt;</div>
+      <div class="descripcion">Encuentra el número más pequeño</div>
+    </a>
+    
+    <a href="juego.html?operador=igual" class="nivel">
+      <div class="encabezado igual-que">IGUAL A</div>
+      <div class="simbolo" style="color: #FF6347;">=</div>
+      <div class="descripcion">Encuentra números iguales</div>
+    </a>
+  </div>
+
+  <script>
+    // Crear partículas decorativas
+    function crearParticulas() {
+      const contenedor = document.getElementById('particulas');
+      
+      for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+          const particula = document.createElement('div');
+          particula.className = 'particula';
+          particula.style.left = Math.random() * 100 + '%';
+          particula.style.animationDelay = Math.random() * 6 + 's';
+          particula.style.animationDuration = (Math.random() * 3 + 4) + 's';
+          
+          // Colores aleatorios
+          const colores = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'];
+          particula.style.background = colores[Math.floor(Math.random() * colores.length)];
+          
+          contenedor.appendChild(particula);
+          
+          // Eliminar después de la animación
+          setTimeout(() => {
+            if (particula.parentNode) {
+              particula.parentNode.removeChild(particula);
+            }
+          }, 8000);
+        }, i * 400);
+      }
+    }
+    
+    // Crear partículas cada cierto tiempo
+    crearParticulas();
+    setInterval(crearParticulas, 8000);
+    
+    // Efecto de sonido hover (simulado con vibración en móviles)
+    document.querySelectorAll('.nivel').forEach(nivel => {
+      nivel.addEventListener('mouseenter', () => {
+        if (navigator.vibrate) {
+          navigator.vibrate(50);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+

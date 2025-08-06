@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparando Aprendo - Juego</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
+            font-family: 'Comic Sans MS', cursive, Arial, sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .game-container {
+            border: 5px solid #4169E1;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            background: #fff;
+            padding: 10px;
+        }
+        
+        .game-header {
+            text-align: center;
+            padding: 10px;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        
+        .game-title {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+            color: #2E8B57;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .game-subtitle {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            color: #8B4513;
+            font-weight: bold;
+        }
+        
+        #game {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .controls-info {
+            background: #F0F8FF;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+            text-align: center;
+            font-size: 12px;
+            color: #4169E1;
+            border: 2px solid #87CEEB;
+        }
+        
+        .controls-info strong {
+            color: #2E8B57;
+        }
+        
+        /* Efectos de brillo para hacer el juego más atractivo */
+        .game-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1, #96CEB4, #FFEAA7, #DDA0DD);
+            border-radius: 17px;
+            z-index: -1;
+            animation: rainbow 3s linear infinite;
+        }
+        
+        @keyframes rainbow {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+        
+        /* Estilo para dispositivos móviles */
+        @media (max-width: 768px) {
+            .game-container {
+                margin: 10px;
+                border-width: 3px;
+            }
+            
+            .game-title {
+                font-size: 20px;
+            }
+            
+            .game-subtitle {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h1 class="game-title">🎮 COMPARANDO APRENDO 🎮</h1>
+            <p class="game-subtitle">¡Elige el número correcto y llega a la meta!</p>
+        </div>
+        
+        <div id="game"></div>
+        
+        <div class="controls-info">
+            <strong>Controles:</strong> ⬅️ ➡️ Mover | ⬆️ Saltar/Subir escalera | 
+            <strong>Objetivo:</strong> Selecciona el número según el operador y evita las bombas 💣
+        </div>
+    </div>
+
+    <script src="gamePrueba.js"></script>
+</body>
+</html>
+
