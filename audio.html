@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Comparando Aprendo - Audio</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Comic Sans MS', cursive, Arial, sans-serif;
+      background: linear-gradient(135deg, #87CEEB 0%, #98FB98 50%, #FFB6C1 100%);
+      text-align: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    nav {
+      background: linear-gradient(45deg, #7CFC00, #32CD32);
+      padding: 15px;
+      text-align: left;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+      position: relative;
+      z-index: 100;
+    }
+    
+    nav a {
+      margin-right: 30px;
+      text-decoration: none;
+      color: #2E8B57;
+      font-weight: bold;
+      font-size: 18px;
+      padding: 10px 20px;
+      border-radius: 25px;
+      background: rgba(255,255,255,0.3);
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+    
+    nav a:hover {
+      background: rgba(255,255,255,0.7);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: calc(100vh - 80px);
+      padding: 20px;
+      position: relative;
+    }
+    
+    .titulo {
+      margin-bottom: 40px;
+      animation: fadeInUp 1s ease-out;
+    }
+    
+    .colorido {
+      margin-bottom: 20px;
+    }
+    
+    .colorido span {
+      font-size: 64px;
+      font-weight: bold;
+      padding: 0 4px;
+      text-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+      display: inline-block;
+      animation: bounce 2s infinite;
+      animation-delay: calc(var(--i) * 0.1s);
+    }
+    
+    .subtitulo {
+      font-size: 48px;
+      font-weight: bold;
+      color: #2E8B57;
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+      margin-bottom: 20px;
+      animation: pulse 2s infinite;
+    }
+    
+    /* Estilo del reproductor de audio */
+    .audio-player {
+      background: rgba(255,255,255,0.95);
+      border-radius: 30px;
+      padding: 40px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      margin: 20px;
+      max-width: 500px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .audio-player::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, #FFD700, #FFA500);
+      opacity: 0.1;
+      z-index: -1;
+    }
+    
+    .speaker-icon {
+      font-size: 120px;
+      margin-bottom: 30px;
+      color: #FF8C00;
+      text-shadow: 0 5px 15px rgba(255, 140, 0, 0.3);
+      animation: speakerPulse 2s infinite;
+    }
+    
+    @keyframes speakerPulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+    }
+    
+    .audio-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #2E8B57;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+    
+    .audio-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+    
+    .control-btn {
+      background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .control-btn:hover {
+      transform: scale(1.1) translateY(-2px);
+      box-shadow: 0 8px 25px rgba(255, 107, 107, 0.6);
+    }
+    
+    .play-btn {
+      width: 80px;
+      height: 80px;
+      font-size: 32px;
+      background: linear-gradient(45deg, #4ECDC4, #44A08D);
+      box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+    }
+    
+    .play-btn:hover {
+      box-shadow: 0 8px 25px rgba(78, 205, 196, 0.6);
+    }
+    
+    .progress-container {
+      margin-bottom: 20px;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 12px;
+      background: rgba(46, 139, 87, 0.2);
+      border-radius: 6px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(45deg, #FFD700, #FFA500);
+      width: 0%;
+      transition: width 0.1s ease;
+      border-radius: 6px;
+    }
+    
+    .time-display {
+      color: #2E8B57;
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 10px;
+      text-align: center;
+    }
+    
+    .volume-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .volume-btn {
+      background: linear-gradient(45deg, #9B59B6, #8E44AD);
+      box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
+    }
+    
+    .volume-btn:hover {
+      box-shadow: 0 6px 20px rgba(155, 89, 182, 0.6);
+    }
+    
+    .volume-slider {
+      width: 120px;
+      height: 6px;
+      background: rgba(46, 139, 87, 0.2);
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+      -webkit-appearance: none;
+    }
+    
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(45deg, #FFD700, #FFA500);
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+    }
+    
+    .volume-slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(45deg, #FFD700, #FFA500);
+      border-radius: 50%;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+    }
+    
+    .playlist {
+      background: rgba(255,255,255,0.7);
+      border-radius: 15px;
+      padding: 15px;
+      margin-top: 20px;
+    }
+    
+    .playlist-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #2E8B57;
+      margin-bottom: 10px;
+    }
+    
+    .playlist-item {
+      padding: 8px 15px;
+      margin: 5px 0;
+      background: rgba(255,255,255,0.8);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      color: #555;
+    }
+    
+    .playlist-item:hover {
+      background: rgba(78, 205, 196, 0.2);
+      transform: translateX(5px);
+    }
+    
+    .playlist-item.active {
+      background: linear-gradient(45deg, #4ECDC4, #44A08D);
+      color: white;
+      font-weight: bold;
+    }
+    
+    .boton-volver {
+      background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+      padding: 15px 30px;
+      border: none;
+      border-radius: 50px;
+      font-size: 18px;
+      font-family: 'Comic Sans MS', cursive;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+      transition: all 0.3s ease;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+      margin-top: 30px;
+    }
+    
+    .boton-volver:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 12px 35px rgba(255, 107, 107, 0.6);
+    }
+    
+    /* Animaciones */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+    
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .colorido span {
+        font-size: 40px;
+      }
+      
+      .subtitulo {
+        font-size: 32px;
+      }
+      
+      .audio-player {
+        margin: 10px;
+        padding: 30px 20px;
+      }
+      
+      .speaker-icon {
+        font-size: 80px;
+      }
+      
+      .audio-controls {
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+      
+      .control-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+      }
+      
+      .play-btn {
+        width: 70px;
+        height: 70px;
+        font-size: 28px;
+      }
+      
+      .volume-slider {
+        width: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">🏠 Inicio</a>
+    <a href="#">👥 Nosotros</a>
+  </nav>
+
+  <div class="container">
+    <div class="titulo">
+      <div class="colorido">
+        <span style="color:red; --i:0;">C</span>
+        <span style="color:orange; --i:1;">o</span>
+        <span style="color:green; --i:2;">m</span>
+        <span style="color:blue; --i:3;">p</span>
+        <span style="color:red; --i:4;">a</span>
+        <span style="color:white; --i:5;">r</span>
+        <span style="color:magenta; --i:6;">a</span>
+        <span style="color:limegreen; --i:7;">n</span>
+        <span style="color:orange; --i:8;">d</span>
+        <span style="color:deeppink; --i:9;">o</span>
+      </div>
+      <div class="subtitulo">APRENDO</div>
+    </div>
+    
+    <div class="audio-player">
+      <div class="speaker-icon">🔊</div>
+      <div class="audio-title" id="audioTitle">Música Educativa</div>
+      
+      <div class="audio-controls">
+        <button class="control-btn" id="prevBtn">⏮</button>
+        <button class="control-btn play-btn" id="playBtn">▶</button>
+        <button class="control-btn" id="nextBtn">⏭</button>
+      </div>
+      
+      <div class="progress-container">
+        <div class="progress-bar" id="progressBar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
+      </div>
+      
+      <div class="volume-container">
+        <button class="control-btn volume-btn" id="volumeBtn">🔊</button>
+        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
+      </div>
+      
+      <div class="playlist">
+        <div class="playlist-title">🎵 Lista de Reproducción</div>
+        <div class="playlist-item active" data-src="https://www.soundjay.com/misc/sounds/bell-ringing-05.wav">🎵 Canción Educativa 1</div>
+        <div class="playlist-item" data-src="https://www.soundjay.com/misc/sounds/bell-ringing-04.wav">🎵 Canción Educativa 2</div>
+        <div class="playlist-item" data-src="https://www.soundjay.com/misc/sounds/bell-ringing-03.wav">🎵 Canción Educativa 3</div>
+      </div>
+      
+      <audio id="audioPlayer" preload="metadata">
+        <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.wav" type="audio/wav">
+        Tu navegador no soporta el elemento de audio.
+      </audio>
+    </div>
+    
+    <a href="index.html" class="boton-volver">🏠 Volver al Inicio</a>
+  </div>
+
+  <script>
+    const audio = document.getElementById('audioPlayer');
+    const playBtn = document.getElementById('playBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressBar = document.getElementById('progressBar');
+    const progressFill = document.getElementById('progressFill');
+    const timeDisplay = document.getElementById('timeDisplay');
+    const volumeBtn = document.getElementById('volumeBtn');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const audioTitle = document.getElementById('audioTitle');
+    const playlistItems = document.querySelectorAll('.playlist-item');
+    const speakerIcon = document.querySelector('.speaker-icon');
+    
+    let isPlaying = false;
+    let currentTrack = 0;
+    
+    const tracks = [
+      { title: 'Canción Educativa 1', src: 'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav' },
+      { title: 'Canción Educativa 2', src: 'https://www.soundjay.com/misc/sounds/bell-ringing-04.wav' },
+      { title: 'Canción Educativa 3', src: 'https://www.soundjay.com/misc/sounds/bell-ringing-03.wav' }
+    ];
+    
+    // Función para formatear tiempo
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+    
+    // Función para reproducir/pausar
+    function togglePlay() {
+      if (isPlaying) {
+        audio.pause();
+        playBtn.innerHTML = '▶';
+        speakerIcon.style.animation = 'none';
+        isPlaying = false;
+      } else {
+        audio.play();
+        playBtn.innerHTML = '⏸';
+        speakerIcon.style.animation = 'speakerPulse 0.5s infinite';
+        isPlaying = true;
+      }
+    }
+    
+    // Función para cargar pista
+    function loadTrack(index) {
+      currentTrack = index;
+      audio.src = tracks[index].src;
+      audioTitle.textContent = tracks[index].title;
+      
+      // Actualizar playlist visual
+      playlistItems.forEach((item, i) => {
+        item.classList.toggle('active', i === index);
+      });
+      
+      // Resetear controles
+      playBtn.innerHTML = '▶';
+      isPlaying = false;
+      progressFill.style.width = '0%';
+      speakerIcon.style.animation = 'speakerPulse 2s infinite';
+    }
+    
+    // Función para pista anterior
+    function prevTrack() {
+      const newIndex = currentTrack > 0 ? currentTrack - 1 : tracks.length - 1;
+      loadTrack(newIndex);
+    }
+    
+    // Función para siguiente pista
+    function nextTrack() {
+      const newIndex = currentTrack < tracks.length - 1 ? currentTrack + 1 : 0;
+      loadTrack(newIndex);
+    }
+    
+    // Event listeners
+    playBtn.addEventListener('click', togglePlay);
+    prevBtn.addEventListener('click', prevTrack);
+    nextBtn.addEventListener('click', nextTrack);
+    
+    audio.addEventListener('timeupdate', () => {
+      if (audio.duration) {
+        const progress = (audio.currentTime / audio.duration) * 100;
+        progressFill.style.width = progress + '%';
+        
+        const currentTime = formatTime(audio.currentTime);
+        const duration = formatTime(audio.duration);
+        timeDisplay.textContent = `${currentTime} / ${duration}`;
+      }
+    });
+    
+    audio.addEventListener('ended', () => {
+      nextTrack();
+    });
+    
+    progressBar.addEventListener('click', (e) => {
+      const rect = progressBar.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const width = rect.width;
+      const percentage = clickX / width;
+      audio.currentTime = percentage * audio.duration;
+    });
+    
+    volumeSlider.addEventListener('input', (e) => {
+      audio.volume = e.target.value / 100;
+      
+      if (audio.volume === 0) {
+        volumeBtn.innerHTML = '🔇';
+      } else if (audio.volume < 0.5) {
+        volumeBtn.innerHTML = '🔉';
+      } else {
+        volumeBtn.innerHTML = '🔊';
+      }
+    });
+    
+    volumeBtn.addEventListener('click', () => {
+      if (audio.volume > 0) {
+        audio.volume = 0;
+        volumeSlider.value = 0;
+        volumeBtn.innerHTML = '🔇';
+      } else {
+        audio.volume = 0.5;
+        volumeSlider.value = 50;
+        volumeBtn.innerHTML = '🔊';
+      }
+    });
+    
+    // Event listeners para playlist
+    playlistItems.forEach((item, index) => {
+      item.addEventListener('click', () => {
+        loadTrack(index);
+        togglePlay();
+      });
+    });
+    
+    // Controles de teclado
+    document.addEventListener('keydown', (e) => {
+      switch(e.code) {
+        case 'Space':
+          e.preventDefault();
+          togglePlay();
+          break;
+        case 'ArrowLeft':
+          audio.currentTime -= 10;
+          break;
+        case 'ArrowRight':
+          audio.currentTime += 10;
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          audio.volume = Math.min(1, audio.volume + 0.1);
+          volumeSlider.value = audio.volume * 100;
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          audio.volume = Math.max(0, audio.volume - 0.1);
+          volumeSlider.value = audio.volume * 100;
+          break;
+      }
+    });
+    
+    // Inicializar
+    audio.volume = 0.5;
+    loadTrack(0);
+  </script>
+</body>
+</html>
+
