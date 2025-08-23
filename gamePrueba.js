@@ -303,6 +303,64 @@ class GameScene extends Phaser.Scene {
             this.numeros.push(Phaser.Math.Between(1, 20));
         }
 
+        // Para el operador "igual", asegurar que haya al menos un número repetido
+        if (this.operadorActual === 'igual') {
+            const numeroRepetido = Phaser.Math.Between(1, 20);
+            this.numeros[0] = numeroRepetido;
+            this.numeros[1] = numeroRepetido; // Asegurar que hay al menos dos números iguales
+        }
+
+        // Mostrar el objetivo del juego según el operador
+        let objetivoTexto = '';
+        let numeroObjetivo = '';
+        
+        switch(this.operadorActual) {
+            case 'menor':
+                numeroObjetivo = Math.min(...this.numeros);
+                objetivoTexto = `Encuentra el número MENOR: ${numeroObjetivo}`;
+                break;
+            case 'mayor':
+                numeroObjetivo = Math.max(...this.numeros);
+                objetivoTexto = `Encuentra el número MAYOR: ${numeroObjetivo}`;
+                break;
+            case 'igual':
+                // Encontrar números repetidos
+                const repetidos = this.numeros.filter(n => this.numeros.indexOf(n) !== this.numeros.lastIndexOf(n));
+                const numerosUnicos = [...new Set(repetidos)];
+                if (numerosUnicos.length > 0) {
+                    objetivoTexto = `Encuentra números IGUALES: ${numerosUnicos.join(', ')}`;
+                } else {
+                    objetivoTexto = 'Encuentra números IGUALES';
+                }
+                break;
+        }
+        
+        // Mostrar el tipo de juego actual y el objetivo
+        let tipoJuegoTexto = '';
+        switch(this.operadorActual) {
+            case 'menor': tipoJuegoTexto = 'JUEGO: MENOR QUE (<)'; break;
+            case 'mayor': tipoJuegoTexto = 'JUEGO: MAYOR QUE (>)'; break;
+            case 'igual': tipoJuegoTexto = 'JUEGO: IGUAL A (=)'; break;
+        }
+        
+        // Texto del tipo de juego en la parte superior
+        this.add.text(400, 50, tipoJuegoTexto, {
+            fontSize: '24px',
+            fill: '#000',
+            fontWeight: 'bold',
+            backgroundColor: '#FFD700',
+            padding: { x: 10, y: 5 }
+        }).setOrigin(0.5);
+        
+        // Texto del objetivo en la parte superior
+        this.add.text(400, 80, objetivoTexto, {
+            fontSize: '18px',
+            fill: '#000',
+            fontWeight: 'bold',
+            backgroundColor: '#87CEEB',
+            padding: { x: 8, y: 4 }
+        }).setOrigin(0.5);
+
         // Cuadrados con números como en la imagen
         this.cuadrados = this.physics.add.staticGroup();
         this.textoNumeros = [];
