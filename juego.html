@@ -105,6 +105,29 @@
                 font-size: 12px;
             }
         }
+        .boton-volver {
+      background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+      padding: 15px 30px;
+      border: none;
+      border-radius: 50px;
+      font-size: 18px;
+      font-family: 'Comic Sans MS', cursive;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+      transition: all 0.3s ease;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+      margin-top: 30px;
+    }
+    
+    .boton-volver:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 12px 35px rgba(255, 107, 107, 0.6);
+    }
+
     </style>
 </head>
 <body>
@@ -120,6 +143,7 @@
             <strong>Controles:</strong> ⬅️ ➡️ Mover | ⬆️ Saltar/Subir escalera | 
             <strong>Objetivo:</strong> Selecciona el número según el operador y evita las bombas 💣
         </div>
+        <a href="index.html" class="boton-volver">🏠 Volver al Inicio</a>
     </div>
 
     <script src="gamePrueba.js"></script>

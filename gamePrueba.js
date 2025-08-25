@@ -3,7 +3,7 @@ class GameScene extends Phaser.Scene {
         super('GameScene');
         this.vidas = 3;
         this.estrellasVidas = [];
-        this.intentos = 10;
+        this.intentos = 0;
         this.plataformas = [];
         this.bombas = [];
         
@@ -98,6 +98,7 @@ class GameScene extends Phaser.Scene {
         if (this.gameOver || this.gameWon) return;
         
         this.vidas--;
+        this.intentos++;
         this.crearEstrellasVida();
         
         // Efecto visual
@@ -149,7 +150,7 @@ class GameScene extends Phaser.Scene {
             case 'igual': operadorTexto = 'IGUAL ='; break;
         }
         
-        this.add.text(150, 280, 'INTENTOS:', { 
+        this.add.text(150, 280, 'INTENTOS:' + this.intentos, { 
             fontSize: '16px', 
             fill: '#000'
         });
@@ -160,7 +161,7 @@ class GameScene extends Phaser.Scene {
             fontWeight: 'bold'
         });
         
-        // Botón REINTENTAR con flecha verde
+        // Botón REINTENTAR with flecha verde
         const botonReinicio = this.add.text(500, 320, 'REINTENTAR ▶', { 
             fontSize: '24px', 
             fill: '#000',
@@ -204,12 +205,12 @@ class GameScene extends Phaser.Scene {
         // Mostrar operador actual
         let operadorTexto = '';
         switch(this.operadorActual) {
-            case 'menor': operadorTexto = 'MENOR QUE <'; break;
-            case 'mayor': operadorTexto = 'MAYOR QUE >'; break;
-            case 'igual': operadorTexto = 'IGUAL ='; break;
+            case 'menor': operadorTexto = 'OPERADOR: <'; break;
+            case 'mayor': operadorTexto = 'OPERADOR: >'; break;
+            case 'igual': operadorTexto = 'OPERADOR: ='; break;
         }
         
-        this.add.text(150, 280, 'INTENTOS:', { 
+        this.add.text(150, 280, 'INTENTOS:' + this.intentos, { 
             fontSize: '16px', 
             fill: '#000'
         });
@@ -297,23 +298,20 @@ class GameScene extends Phaser.Scene {
         
         this.physics.add.collider(this.player, this.platform);
 
-        // Generar números aleatorios para los cuadrados
+        // Generar números aleatorios para los cuadrados SIN REPETIR
         this.numeros = [];
-        for (let i = 0; i < 5; i++) {
-            this.numeros.push(Phaser.Math.Between(1, 20));
+        while (this.numeros.length < 5) {
+            let num = Phaser.Math.Between(1, 20);
+            if (!this.numeros.includes(num)) {
+                this.numeros.push(num);
+            }
         }
 
-        // Para el operador "igual", asegurar que haya al menos un número repetido
-        if (this.operadorActual === 'igual') {
-            const numeroRepetido = Phaser.Math.Between(1, 20);
-            this.numeros[0] = numeroRepetido;
-            this.numeros[1] = numeroRepetido; // Asegurar que hay al menos dos números iguales
-        }
-
+       
         // Mostrar el objetivo del juego según el operador
         let objetivoTexto = '';
         let numeroObjetivo = '';
-        
+
         switch(this.operadorActual) {
             case 'menor':
                 numeroObjetivo = Math.min(...this.numeros);
@@ -324,14 +322,9 @@ class GameScene extends Phaser.Scene {
                 objetivoTexto = `Encuentra el número MAYOR: ${numeroObjetivo}`;
                 break;
             case 'igual':
-                // Encontrar números repetidos
-                const repetidos = this.numeros.filter(n => this.numeros.indexOf(n) !== this.numeros.lastIndexOf(n));
-                const numerosUnicos = [...new Set(repetidos)];
-                if (numerosUnicos.length > 0) {
-                    objetivoTexto = `Encuentra números IGUALES: ${numerosUnicos.join(', ')}`;
-                } else {
-                    objetivoTexto = 'Encuentra números IGUALES';
-                }
+                // Elegir un número aleatorio de los cubos como objetivo
+                numeroObjetivo = Phaser.Utils.Array.GetRandom(this.numeros);
+                objetivoTexto = `Encuentra el número IGUAL a: ${numeroObjetivo}`;
                 break;
         }
         
@@ -397,9 +390,7 @@ class GameScene extends Phaser.Scene {
                     esCorrecta = numeroSeleccionado === Math.max(...this.numeros);
                     break;
                 case 'igual':
-                    // Para igual, buscar si hay números repetidos
-                    const repetidos = this.numeros.filter(n => this.numeros.indexOf(n) !== this.numeros.lastIndexOf(n));
-                    esCorrecta = repetidos.includes(numeroSeleccionado);
+                    esCorrecta = numeroSeleccionado === numeroObjetivo;
                     break;
             }
             
