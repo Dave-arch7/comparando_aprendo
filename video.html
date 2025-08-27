@@ -414,7 +414,7 @@
     <div class="video-container">
       <div class="video-screen">
         <video class="video-element" id="videoPlayer" preload="metadata">
-          <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+          <source src="assets/los pollitos.mp4" type="video/mp4">
           Tu navegador no soporta el elemento de video.
         </video>
       </div>
@@ -524,6 +524,16 @@
         volumeSlider.value = 50;
         volumeBtn.innerHTML = '🔊';
       }
+    });
+    
+    // Botón para retroceder 10 segundos
+    prevBtn.addEventListener('click', () => {
+      video.currentTime = Math.max(0, video.currentTime - 10);
+    });
+
+    // Botón para avanzar 10 segundos
+    nextBtn.addEventListener('click', () => {
+      video.currentTime = Math.min(video.duration, video.currentTime + 10);
     });
     
     // Controles de teclado
